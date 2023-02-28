@@ -1,5 +1,24 @@
-# Workout Tracker v2 Backend
+# README
 
-Ruby on Rails app as the CRUD API for the v2 rework of [workout-tracker](https://github.com/andrewmloop/workout-tracker).
+This README would normally document whatever steps are necessary to get the
+application up and running.
 
-Link to [project board](https://github.com/users/andrewmloop/projects/2).
+Things you may want to cover:
+
+* Ruby version
+
+* System dependencies
+
+* Configuration
+
+* Database creation
+
+* Database initialization
+
+* How to run the test suite
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
