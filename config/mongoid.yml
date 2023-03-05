@@ -5,7 +5,6 @@ development:
     default:
       # Mongoid can connect to a URI accepted by the driver:
       uri: <%= ENV['MONGODB_DEV_URI'] %>
-      # uri: mongodb+srv://workout-tracker-v2-admin:<password>@cluster-dev.vqxn5ed.mongodb.net/?retryWrites=true&w=majority
 
       # Otherwise define the parameters separately.
       # This defines the name of the default database that Mongoid can connect to.
