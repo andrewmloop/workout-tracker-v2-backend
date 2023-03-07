@@ -6,9 +6,6 @@ class User
 
   VALID_EMAIL_REGEXP = URI::MailTo::EMAIL_REGEXP
 
-  has_secure_password
-  after_initialize :set_defaults
-
   field :first_name, type: String
   validates :first_name,
             presence: {
@@ -34,15 +31,11 @@ class User
             }
 
   field :password_digest, type: String
-  validates :password_digest,
-            presence: true,
-            length: {
-              minimum: 6,
-              maximum: 255
-            }
-
   field :left_handed, type: Boolean
   field :use_metric, type: Boolean
+
+  has_secure_password
+  after_initialize :set_defaults
 
   private
 

@@ -176,10 +176,11 @@ development:
 test:
   clients:
     default:
-      database: workout_tracker_v2_backend_test
-      hosts:
-        - localhost:27017
-      options:
-        read:
-          mode: :primary
-        max_pool_size: 1
+      uri: <%= ENV['MONGODB_TEST_URI'] %>
+      # database: workout_tracker_v2_backend_test
+      # hosts:
+      #   - localhost:27017
+      # options:
+      #   read:
+      #     mode: :primary
+      #   max_pool_size: 1
