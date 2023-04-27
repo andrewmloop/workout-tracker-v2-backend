@@ -1,46 +1,37 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  test 'should not save a user without a first name' do
-    user = User.new
+  user = User.new
+
+  setup do
+    user.first_name = 'valid name'
     user.email = 'valid@email.com'
     user.password = 'Valid9password'
     user.password_confirmation = 'Valid9password'
+  end
+
+  test 'should not save a user without a first name' do
+    user.first_name = nil
     assert_not user.save, 'Saved user with no first name'
   end
 
   test 'should not save a user with a short first name' do
-    user = User.new
     user.first_name = 'ab'
-    user.email = 'valid@email.com'
-    user.password = 'Valid9password'
-    user.password_confirmation = 'Valid9password'
     assert_not user.save, 'Saved user with too short name'
   end
 
   test 'should not save a user with a long first name' do
-    user = User.new
     user.first_name = 'abcdefghijklmnopqrstu'
-    user.email = 'valid@email.com'
-    user.password = 'Valid9password'
-    user.password_confirmation = 'Valid9password'
     assert_not user.save, 'Saved user with too long name'
   end
 
   test 'should not save a user without an email' do
-    user = User.new
-    user.first_name = 'valid'
-    user.password = 'Valid9password'
-    user.password_confirmation = 'Valid9password'
+    user.email = nil
     assert_not user.save, 'Saved user with no email'
   end
 
   test 'should not save a user with an invalid email' do
-    user = User.new
-    user.first_name = 'valid'
     user.email = 'invalid@email@fake.com'
-    user.password = 'Valid9password'
-    user.password_confirmation = 'Valid9password'
     assert_not user.save, 'Saved user with invalid email'
   end
 
@@ -62,28 +53,28 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'should not save a user without a password' do
-    user = User.new
-    user.first_name = 'valid'
-    user.email = 'valid@email.com'
+    user.password = nil
     assert_not user.save, 'Saved user with no password'
   end
 
   test 'should not save a user when password confirmation does not match' do
-    user = User.new
-    user.first_name = 'valid'
-    user.email = 'valid@email.com'
     user.password = 'Password1'
     user.password_confirmation = 'Password222'
     assert_not user.save, 'Saved user without a matching password confirmation'
   end
 
   test 'should default left_handed to false' do
-    user = User.new
-    assert_equal user.left_handed, false, 'Left_handed did not default to false'
+    user1 = User.new
+    assert_equal user1.left_handed, false, 'Left_handed did not default to false'
   end
 
   test 'should default is_metric to false' do
-    user = User.new
-    assert_equal user.use_metric, false, 'Use_metric did not default to false'
+    user1 = User.new
+    assert_equal user1.use_metric, false, 'Use_metric did not default to false'
+  end
+
+  test 'should save a valid user' do
+    user.email = "#{DateTime.now.strftime('%s')}@email.com"
+    assert user.save, "Could not save a valid user, #{user.errors.full_messages}"
   end
 end
