@@ -1,5 +1,5 @@
 class ExercisesController < ApplicationController
-  before_action :set_exercise, only: %i[ show update destroy ]
+  before_action :set_exercise, only: %i[show update destroy]
 
   # GET /exercises
   def index
@@ -39,13 +39,16 @@ class ExercisesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_exercise
-      @exercise = Exercise.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def exercise_params
-      params.require(:exercise).permit(:name, :level, :primary_muscles, :secondary_muscles, :equipment, :category, :instructions)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_exercise
+    @exercise = Exercise.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def exercise_params
+    params.require(:exercise)
+          .permit(:name, :level, :primary_muscles, :secondary_muscles,
+                  :equipment, :category, :instructions)
+  end
 end
