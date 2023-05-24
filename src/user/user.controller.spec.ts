@@ -5,6 +5,7 @@ import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { describe } from 'node:test';
 import { Types } from 'mongoose';
+import { MongoServerErrorFilter } from 'src/utils/filters/mongo-server-error.filter';
 
 const mockUser: User = {
   firstName: 'Valid',

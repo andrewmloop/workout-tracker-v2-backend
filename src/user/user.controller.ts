@@ -12,8 +12,8 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Types } from 'mongoose';
-import { MongoServerErrorFilter } from 'src/utils/filters/mongo-server-error.filter';
-import { ParseObjectIdPipe } from 'src/utils/pipes/parse-objectid.pipe';
+import { MongoServerErrorFilter } from '../utils/filters/mongo-server-error.filter';
+import { ParseObjectIdPipe } from '../utils/pipes/parse-objectid.pipe';
 
 @Controller('user')
 export class UserController {
