@@ -6,17 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  UseFilters,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Types } from 'mongoose';
+import { MongoServerErrorFilter } from 'src/utils/filters/mongo-server-error.filter';
+import { ParseObjectIdPipe } from 'src/utils/pipes/parse-objectid.pipe';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @UseFilters(MongoServerErrorFilter)
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.userService.create(createUserDto);
   }
@@ -27,20 +31,20 @@ export class UserController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: Types.ObjectId) {
+  async findOne(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
     return await this.userService.findOne(id);
   }
 
   @Patch(':id')
   async update(
-    @Param('id') id: Types.ObjectId,
+    @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return await this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: Types.ObjectId) {
+  async remove(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
     return await this.userService.remove(id);
   }
 }
