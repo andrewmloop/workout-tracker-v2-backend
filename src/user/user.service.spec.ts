@@ -28,6 +28,7 @@ describe('UserService', () => {
             constructor: jest.fn().mockResolvedValue(mockUser),
             create: jest.fn(),
             find: jest.fn(),
+            findOne: jest.fn(),
             findById: jest.fn(),
             findByIdAndUpdate: jest.fn(),
             findByIdAndRemove: jest.fn(),
@@ -70,11 +71,17 @@ describe('UserService', () => {
     expect(returnedUsers).toEqual([mockUser]);
   });
 
-  it('should return one user', async () => {
+  it('should return one user by id', async () => {
     jest.spyOn(model, 'findById').mockResolvedValue(mockUser);
-    const returnedUser = await service.findOne(
+    const returnedUser = await service.findOneById(
       '123abc' as unknown as Types.ObjectId,
     );
+    expect(returnedUser).toEqual(mockUser);
+  });
+
+  it('should return one user by email', async () => {
+    jest.spyOn(model, 'findOne').mockResolvedValue(mockUser);
+    const returnedUser = await service.findOneByEmail('email@email.com');
     expect(returnedUser).toEqual(mockUser);
   });
 

@@ -5,7 +5,6 @@ import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { describe } from 'node:test';
 import { Types } from 'mongoose';
-import { MongoServerErrorFilter } from 'src/utils/filters/mongo-server-error.filter';
 
 const mockUser: User = {
   firstName: 'Valid',
@@ -34,7 +33,7 @@ describe('UserController', () => {
           useValue: {
             create: jest.fn().mockResolvedValue(mockUser),
             findAll: jest.fn().mockResolvedValue([mockUser]),
-            findOne: jest.fn().mockResolvedValue(mockUser),
+            findOneById: jest.fn().mockResolvedValue(mockUser),
             update: jest.fn().mockResolvedValue(mockUser),
             remove: jest.fn().mockResolvedValue(true),
           },
@@ -73,7 +72,7 @@ describe('UserController', () => {
     it('should return one User', async () => {
       const mockId = '123abc' as unknown as Types.ObjectId;
       const findOneSpy = jest
-        .spyOn(service, 'findOne')
+        .spyOn(service, 'findOneById')
         .mockResolvedValueOnce(mockUser);
 
       const user = await controller.findOne(mockId);

@@ -32,7 +32,7 @@ export class UserController {
 
   @Get(':id')
   async findOne(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
-    return await this.userService.findOne(id);
+    return await this.userService.findOneById(id);
   }
 
   @Patch(':id')
