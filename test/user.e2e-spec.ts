@@ -23,7 +23,7 @@ describe('User (e2e)', () => {
     app = moduleRef.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
-  });
+  }, 10_000);
 
   afterAll(async () => {
     await connection.close();
@@ -37,7 +37,7 @@ describe('User (e2e)', () => {
       password: 'Password1!',
     };
 
-    it('should return a 400 when missinga firstName', async () => {
+    it('should return a 400 when missing a firstName', async () => {
       const data = { ...userData };
       data.firstName = '';
       return await request(app.getHttpServer())

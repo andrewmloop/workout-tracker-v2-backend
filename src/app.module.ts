@@ -13,9 +13,9 @@ import { AuthModule } from './auth/auth.module';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri:
-          configService.get('NODE_ENV') === 'development'
-            ? configService.get('MONGODB_URI_DEV')
-            : configService.get('MONGODB_URI_PROD'),
+          configService.get('NODE_ENV') === 'production'
+            ? configService.get('MONGODB_URI_PROD')
+            : configService.get('MONGODB_URI_DEV'),
       }),
       inject: [ConfigService],
     }),
