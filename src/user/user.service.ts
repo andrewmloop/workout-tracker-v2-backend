@@ -19,27 +19,27 @@ export class UserService {
   }
 
   async findAll(): Promise<User[]> {
-    return this.userModel.find();
+    return await this.userModel.find();
   }
 
   async findOneById(id: Types.ObjectId): Promise<User> {
-    return this.userModel.findById(id);
+    return await this.userModel.findById(id);
   }
 
   async findOneByEmail(email: string): Promise<User> {
-    return this.userModel.findOne({ email: email });
+    return await this.userModel.findOne({ email: email });
   }
 
   async update(
     id: Types.ObjectId,
     updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    return this.userModel.findByIdAndUpdate(id, updateUserDto, {
+    return await this.userModel.findByIdAndUpdate(id, updateUserDto, {
       new: true,
     });
   }
 
   async remove(id: Types.ObjectId): Promise<boolean> {
-    return this.userModel.findByIdAndRemove(id);
+    return await this.userModel.findByIdAndRemove(id);
   }
 }

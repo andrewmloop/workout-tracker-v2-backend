@@ -1,35 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-
-const LEVEL_ENUM = ['beg', 'int', 'adv'];
-const MUSCLE_ENUM = [
-  'abdominals',
-  'abductors',
-  'adductors',
-  'biceps',
-  'calves',
-  'chest',
-  'forearms',
-  'glutes',
-  'hamstrings',
-  'lats',
-  'lowerback',
-  'middleback',
-  'neck',
-  'quadriceps',
-  'shoulders',
-  'traps',
-  'triceps',
-];
-const CATEGORY_ENUM = [
-  'cardio',
-  'olympicWeightlifting',
-  'plyometrics',
-  'powerlifting',
-  'strength',
-  'stretching',
-  'strongman',
-];
+import {
+  CATEGORY_ENUM,
+  LEVEL_ENUM,
+  MUSCLE_ENUM,
+} from '../../utils/enums/exercise.enum';
 
 export type ExerciseDocument = HydratedDocument<Exercise>;
 
