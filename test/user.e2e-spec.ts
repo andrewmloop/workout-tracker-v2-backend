@@ -7,19 +7,21 @@ import { AppModule } from '../src/app.module';
 import { getConnectionToken } from '@nestjs/mongoose';
 import { CreateUserDto } from '../src/user/dto/create-user.dto';
 import { UpdateUserDto } from '../src/user/dto/update-user.dto';
+import { AuthGuard } from '../src/auth/auth.guard';
 
 describe('User (e2e)', () => {
   let app: INestApplication;
   let connection: Connection;
-  let userService: UserService;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(AuthGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     connection = await moduleRef.get(getConnectionToken());
-    userService = moduleRef.get<UserService>(UserService);
     app = moduleRef.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
