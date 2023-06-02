@@ -45,7 +45,7 @@ export class Exercise {
   category: string;
 
   @Prop()
-  instructions: string[];
+  instructions: Types.Array<string>;
 }
 
 export const ExerciseSchema = SchemaFactory.createForClass(Exercise);

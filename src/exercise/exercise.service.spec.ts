@@ -131,7 +131,7 @@ describe('ExerciseService', () => {
     const deleteSpy = jest
       .spyOn(model, 'findByIdAndDelete')
       .mockResolvedValueOnce(true);
-    const response = await service.delete(exerciseId);
+    const response = await service.remove(exerciseId);
     expect(deleteSpy).toHaveBeenCalledWith(exerciseId);
     expect(response).toEqual(true);
   });

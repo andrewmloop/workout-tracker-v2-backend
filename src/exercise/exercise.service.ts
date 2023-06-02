@@ -43,7 +43,7 @@ export class ExerciseService {
     });
   }
 
-  async delete(id: Types.ObjectId): Promise<boolean> {
+  async remove(id: Types.ObjectId): Promise<boolean> {
     return await this.exerciseModel.findByIdAndDelete(id);
   }
 }
