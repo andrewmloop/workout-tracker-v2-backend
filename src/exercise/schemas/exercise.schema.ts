@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import {
   CATEGORY_ENUM,
   LEVEL_ENUM,
@@ -27,12 +27,12 @@ export class Exercise {
     required: true,
     enum: MUSCLE_ENUM,
   })
-  primaryMuscles: string[];
+  primaryMuscles: Types.Array<string>;
 
   @Prop({
     enum: MUSCLE_ENUM,
   })
-  secondaryMuscles: string[];
+  secondaryMuscles: Types.Array<string>;
 
   @Prop({
     minlength: 1,
