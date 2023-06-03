@@ -20,7 +20,7 @@ export class CreateExerciseDto {
   level: string;
 
   @IsNotEmpty({
-    message: 'A level is required',
+    message: 'A primary muscle is required',
   })
   @IsIn(MUSCLE_ENUM, {
     message: 'That is not a valid muscle',
