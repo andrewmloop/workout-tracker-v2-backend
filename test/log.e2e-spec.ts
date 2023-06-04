@@ -2,10 +2,11 @@ import * as request from 'supertest';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { getConnectionToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
-import { Connection } from 'mongoose';
+import { Connection, Types } from 'mongoose';
 import { AppModule } from '../src/app.module';
 import { AuthGuard } from '../src/auth/auth.guard';
 import { CreateRoutineDto } from '../src/routine/dto/create-routine.dto';
+import { CreateLogDto } from '../src/log/dto/create-log.dto';
 
 describe('Log (e2e)', () => {
   let app: INestApplication;
@@ -31,10 +32,13 @@ describe('Log (e2e)', () => {
   }, 10_000);
 
   describe('POST /log', () => {
-    const logData: CreateRoutineDto = {
-      name: 'Test',
-      description: 'A test routine',
-      exercises: [],
+    const logData: CreateLogDto = {
+      userId: '123abc' as unknown as Types.ObjectId,
+      exerciseId: '456def' as unknown as Types.ObjectId,
+      reps: 10,
+      weightImperial: 225,
+      weightMetric: 100,
+      form: 'good',
     };
 
     it('should return a 400 when name is missing', async () => {
