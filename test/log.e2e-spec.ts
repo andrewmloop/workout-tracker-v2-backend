@@ -41,9 +41,9 @@ describe('Log (e2e)', () => {
       form: 'good',
     };
 
-    it('should return a 400 when name is missing', async () => {
-      const data = { ...routineData };
-      data.name = '';
+    it('should return a 400 when userId is missing', async () => {
+      const data = { ...logData };
+      data.userId = null;
       return await request(app.getHttpServer())
         .post('/exercise')
         .send(data)
