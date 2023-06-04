@@ -5,7 +5,6 @@ import { Routine } from './schemas/routine.schema';
 import { Types } from 'mongoose';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
-import { async } from 'rxjs';
 
 describe('RoutineController', () => {
   let controller: RoutineController;
@@ -17,7 +16,7 @@ describe('RoutineController', () => {
     description: 'A test routine',
     exercises: [
       {
-        exercise: '123abc' as unknown as Types.ObjectId,
+        exerciseId: '123abc' as unknown as Types.ObjectId,
         sets: 3,
         reps: 8,
       },

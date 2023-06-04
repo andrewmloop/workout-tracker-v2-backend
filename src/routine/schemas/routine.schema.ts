@@ -19,7 +19,7 @@ export class Routine {
   @Prop({
     type: [
       {
-        exercise: {
+        exerciseId: {
           type: Types.ObjectId,
           ref: Exercise.name,
           required: true,
@@ -37,7 +37,7 @@ export class Routine {
       },
     ],
   })
-  exercises: { exercise: Types.ObjectId; sets: number; reps: number }[];
+  exercises: { exerciseId: Types.ObjectId; sets: number; reps: number }[];
 }
 
 export const RoutineSchema = SchemaFactory.createForClass(Routine);

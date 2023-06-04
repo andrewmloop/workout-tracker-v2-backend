@@ -16,7 +16,7 @@ describe('RoutineService', () => {
     description: 'A test routine',
     exercises: [
       {
-        exercise: '123abc' as unknown as Types.ObjectId,
+        exerciseId: '123abc' as unknown as Types.ObjectId,
         sets: 3,
         reps: 8,
       },
