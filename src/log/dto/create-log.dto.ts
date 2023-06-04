@@ -1,12 +1,14 @@
-import { IsEnum, IsNotEmpty, IsNumber, Min } from 'class-validator';
+import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, Min } from 'class-validator';
 import { Types } from 'mongoose';
 import { FORM_ENUM } from '../../utils/enums/log.enum';
 
 export class CreateLogDto {
   @IsNotEmpty()
+  @IsMongoId()
   userId: Types.ObjectId;
 
   @IsNotEmpty()
+  @IsMongoId()
   exerciseId: Types.ObjectId;
 
   @IsNumber()
