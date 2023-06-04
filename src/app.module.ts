@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ExerciseModule } from './exercise/exercise.module';
 import { RoutineModule } from './routine/routine.module';
+import { LogModule } from './log/log.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { RoutineModule } from './routine/routine.module';
     AuthModule,
     ExerciseModule,
     RoutineModule,
+    LogModule,
   ],
   controllers: [AppController],
   providers: [AppService],
