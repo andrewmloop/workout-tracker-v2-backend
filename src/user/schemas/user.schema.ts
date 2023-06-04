@@ -9,6 +9,7 @@ export type UserDocument = HydratedDocument<User>;
 export class User {
   @Prop({
     required: true,
+    type: String,
     trim: true,
     minlength: 1,
     maxlength: 20,
@@ -17,6 +18,7 @@ export class User {
 
   @Prop({
     required: true,
+    type: String,
     unique: true,
     match: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/,
   })
@@ -24,15 +26,18 @@ export class User {
 
   @Prop({
     required: true,
+    type: String,
   })
   password: string;
 
   @Prop({
+    type: Boolean,
     default: false,
   })
   useMetric: boolean;
 
   @Prop({
+    type: Boolean,
     default: false,
   })
   useLeftHand: boolean;

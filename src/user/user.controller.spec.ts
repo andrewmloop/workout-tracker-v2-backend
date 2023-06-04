@@ -5,24 +5,31 @@ import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { describe } from 'node:test';
 import { Types } from 'mongoose';
-
-const mockUser: User = {
-  firstName: 'Valid',
-  email: 'valid@email.com',
-  password: 'Password1',
-  useMetric: false,
-  useLeftHand: false,
-};
-
-const mockUserDTO: CreateUserDto = {
-  firstName: 'Valid',
-  email: 'valid@email.com',
-  password: 'Password1',
-};
+import { UpdateUserDto } from './dto/update-user.dto';
 
 describe('UserController', () => {
   let controller: UserController;
   let service: UserService;
+
+  const userId = '123abc' as unknown as Types.ObjectId;
+  const mockUser = {
+    _id: '123abc',
+    firstName: 'Valid',
+    email: 'valid@email.com',
+    password: 'Password1',
+    useLeftHand: false,
+    useMetric: false,
+  };
+
+  const mockCreateDto: CreateUserDto = {
+    firstName: 'Valid',
+    email: 'valid@email.com',
+    password: 'Password1',
+  };
+
+  const mockUpdateDto: UpdateUserDto = {
+    firstName: 'new name',
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -51,62 +58,44 @@ describe('UserController', () => {
 
   describe('create', () => {
     it('should return a created user', async () => {
-      const createSpy = jest
-        .spyOn(service, 'create')
-        .mockResolvedValueOnce(mockUser);
-
-      const user = await controller.create(mockUserDTO);
-      expect(createSpy).toHaveBeenCalledWith(mockUserDTO);
-      expect(user).toEqual(mockUser);
+      const createSpy = jest.spyOn(service, 'create');
+      const createdUser = await controller.create(mockCreateDto);
+      expect(createSpy).toHaveBeenCalledWith(mockCreateDto);
+      expect(createdUser).toEqual(mockUser);
     });
   });
 
   describe('findAll', () => {
     it('should return an array of Users', async () => {
-      const users = await controller.findAll();
-      expect(users).toEqual([mockUser]);
+      const foundUsers = await controller.findAll();
+      expect(foundUsers).toEqual([mockUser]);
     });
   });
 
   describe('findOne', () => {
     it('should return one User', async () => {
-      const mockId = '123abc' as unknown as Types.ObjectId;
-      const findOneSpy = jest
-        .spyOn(service, 'findOneById')
-        .mockResolvedValueOnce(mockUser);
-
-      const user = await controller.findOne(mockId);
-
-      expect(findOneSpy).toHaveBeenCalledWith(mockId);
-      expect(user).toEqual(mockUser);
+      const findOneSpy = jest.spyOn(service, 'findOneById');
+      const foundUser = await controller.findOne(userId);
+      expect(findOneSpy).toHaveBeenCalledWith(userId);
+      expect(foundUser).toEqual(mockUser);
     });
   });
 
   describe('update', () => {
     it('should update and return one User', async () => {
-      const mockId = '123abc' as unknown as Types.ObjectId;
-      const updateSpy = jest
-        .spyOn(service, 'update')
-        .mockResolvedValueOnce(mockUser);
-
-      const user = await controller.update(mockId, mockUserDTO);
-
-      expect(updateSpy).toHaveBeenCalledWith(mockId, mockUserDTO);
-      expect(user).toEqual(mockUser);
+      const updateSpy = jest.spyOn(service, 'update');
+      const updatedUser = await controller.update(userId, mockUpdateDto);
+      expect(updateSpy).toHaveBeenCalledWith(userId, mockUpdateDto);
+      expect(updatedUser).toEqual(mockUser);
     });
   });
 
   describe('remove', () => {
     it('should return true', async () => {
-      const mockId = '123abc' as unknown as Types.ObjectId;
-      const removeSpy = jest
-        .spyOn(service, 'remove')
-        .mockResolvedValueOnce(true);
-
-      const didRemove = await controller.remove(mockId);
-
-      expect(removeSpy).toHaveBeenCalledWith(mockId);
-      expect(didRemove).toEqual(true);
+      const removeSpy = jest.spyOn(service, 'remove');
+      const response = await controller.remove(userId);
+      expect(removeSpy).toHaveBeenCalledWith(userId);
+      expect(response).toEqual(true);
     });
   });
 });
