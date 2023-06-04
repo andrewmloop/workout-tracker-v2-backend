@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { Exercise } from '../../exercise/schemas/exercise.schema';
 
 export type RoutineDocument = HydratedDocument<Routine>;
 
@@ -20,6 +21,7 @@ export class Routine {
       {
         exercise: {
           type: Types.ObjectId,
+          ref: Exercise.name,
           required: true,
         },
         sets: {
