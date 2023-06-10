@@ -1,11 +1,9 @@
 import * as request from 'supertest';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { Connection, Types } from 'mongoose';
+import { Connection } from 'mongoose';
 import { AppModule } from '../src/app.module';
 import { getConnectionToken } from '@nestjs/mongoose';
-import { CreateUserDto } from '../src/user/dto/create-user.dto';
-import { UpdateUserDto } from '../src/user/dto/update-user.dto';
 import { AuthGuard } from '../src/auth/auth.guard';
 
 describe('User (e2e)', () => {
