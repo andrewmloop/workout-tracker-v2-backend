@@ -15,7 +15,6 @@ describe('Auth (e2e)', () => {
       imports: [AppModule],
     }).compile();
 
-    // configService = moduleRef.get<ConfigService>(ConfigService);
     connection = await moduleRef.get(getConnectionToken());
     app = moduleRef.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());

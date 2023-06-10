@@ -1,4 +1,10 @@
-import { IsIn, IsNotEmpty } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 import {
   CATEGORY_ENUM,
   LEVEL_ENUM,
@@ -6,38 +12,32 @@ import {
 } from '../../utils/enums/exercise.enum';
 
 export class CreateExerciseDto {
-  @IsNotEmpty({
-    message: 'A name is required',
-  })
+  @IsString()
+  @MinLength(1)
   name: string;
 
-  @IsNotEmpty({
-    message: 'A level is required',
-  })
-  @IsIn(LEVEL_ENUM, {
-    message: 'That is not a valid level',
-  })
+  @IsEnum(LEVEL_ENUM)
   level: string;
 
-  @IsNotEmpty({
-    message: 'A primary muscle is required',
-  })
-  @IsIn(MUSCLE_ENUM, {
-    message: 'That is not a valid muscle',
-  })
+  @IsArray()
+  @IsEnum(MUSCLE_ENUM, { each: true })
   primaryMuscles: string[];
 
-  @IsIn(MUSCLE_ENUM, {
-    message: 'That is not a valid muscle',
-  })
+  @IsArray()
+  @IsOptional()
+  @IsEnum(MUSCLE_ENUM, { each: true })
   secondaryMuscles: string[];
 
+  @IsOptional()
+  @IsString()
   equipment: string;
 
-  @IsIn(CATEGORY_ENUM, {
-    message: 'That is not a valid category',
-  })
+  @IsOptional()
+  @IsEnum(CATEGORY_ENUM)
   category: string;
 
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
   instructions: string[];
 }

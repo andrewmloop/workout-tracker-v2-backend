@@ -5,21 +5,20 @@ import { Test } from '@nestjs/testing';
 import { Connection, Types } from 'mongoose';
 import { AppModule } from '../src/app.module';
 import { AuthGuard } from '../src/auth/auth.guard';
-import { CreateExerciseDto } from '../src/exercise/dto/create-exercise.dto';
 
 describe('Exercise (e2e)', () => {
   let app: INestApplication;
   let connection: Connection;
 
   const invalidObjectId = 'InvalidID1234';
-  const exerciseData: CreateExerciseDto = {
-    name: 'Test Exercise',
-    level: 'adv',
-    primaryMuscles: new Types.Array('chest', 'shoulders'),
-    secondaryMuscles: new Types.Array('triceps'),
-    equipment: 'Bench press',
-    category: 'strength',
-    instructions: new Types.Array('Lay on bench.', 'Press bar.'),
+  const exerciseData = {
+    name: 'Test Exercise' as any,
+    level: 'adv' as any,
+    primaryMuscles: ['chest', 'shoulders'] as any,
+    secondaryMuscles: ['triceps'] as any,
+    equipment: 'Bench press' as any,
+    category: 'strength' as any,
+    instructions: ['Lay on bench.', 'Press bar.'] as any,
   };
 
   beforeAll(async () => {
@@ -44,7 +43,25 @@ describe('Exercise (e2e)', () => {
   describe('POST /exercise', () => {
     it('should return a 400 when missing a name', async () => {
       const data = { ...exerciseData };
+      data.name = null;
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when name has a length less than 1', async () => {
+      const data = { ...exerciseData };
       data.name = '';
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when name is not a string', async () => {
+      const data = { ...exerciseData };
+      data.name = 12;
       return await request(app.getHttpServer())
         .post('/exercise')
         .send(data)
@@ -53,7 +70,7 @@ describe('Exercise (e2e)', () => {
 
     it('should return a 400 when missing a level', async () => {
       const data = { ...exerciseData };
-      data.level = '';
+      data.level = null;
       return await request(app.getHttpServer())
         .post('/exercise')
         .send(data)
@@ -80,7 +97,16 @@ describe('Exercise (e2e)', () => {
 
     it('should return a 400 when a primaryMuscle is invalid', async () => {
       const data = { ...exerciseData };
-      data.primaryMuscles = new Types.Array('invalid');
+      data.primaryMuscles.push('invalid');
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when a primaryMuscle is not an array', async () => {
+      const data = { ...exerciseData };
+      data.primaryMuscles = 'chest';
       return await request(app.getHttpServer())
         .post('/exercise')
         .send(data)
@@ -89,7 +115,25 @@ describe('Exercise (e2e)', () => {
 
     it('should return a 400 when a secondaryMuscle is invalid', async () => {
       const data = { ...exerciseData };
-      data.secondaryMuscles = new Types.Array('invalid');
+      data.secondaryMuscles.push('invalid');
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when a secondaryMuscle is not an array', async () => {
+      const data = { ...exerciseData };
+      data.secondaryMuscles = 'chest';
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when equiment is not a string', async () => {
+      const data = { ...exerciseData };
+      data.equipment = 123;
       return await request(app.getHttpServer())
         .post('/exercise')
         .send(data)
@@ -99,6 +143,24 @@ describe('Exercise (e2e)', () => {
     it('should return a 400 when a category is invalid', async () => {
       const data = { ...exerciseData };
       data.category = 'invalid';
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when instructions is not an array', async () => {
+      const data = { ...exerciseData };
+      data.instructions = 'instructions';
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when instructions is not a string', async () => {
+      const data = { ...exerciseData };
+      data.instructions.push(123);
       return await request(app.getHttpServer())
         .post('/exercise')
         .send(data)
