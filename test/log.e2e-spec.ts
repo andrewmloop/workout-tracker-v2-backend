@@ -2,14 +2,23 @@ import * as request from 'supertest';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { getConnectionToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
-import { Connection, Types } from 'mongoose';
+import { Connection } from 'mongoose';
 import { AppModule } from '../src/app.module';
 import { AuthGuard } from '../src/auth/auth.guard';
-import { CreateLogDto } from '../src/log/dto/create-log.dto';
 
 describe('Log (e2e)', () => {
   let app: INestApplication;
   let connection: Connection;
+
+  const invalidId = '1234';
+  const logData = {
+    userId: '123abc' as any,
+    exerciseId: '456def' as any,
+    reps: 10 as any,
+    weightImperial: 225 as any,
+    weightMetric: 100 as any,
+    form: 'good' as any,
+  };
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -31,15 +40,6 @@ describe('Log (e2e)', () => {
   }, 10_000);
 
   describe('POST /log', () => {
-    const logData = {
-      userId: '123abc' as any,
-      exerciseId: '456def' as any,
-      reps: 10 as any,
-      weightImperial: 225 as any,
-      weightMetric: 100 as any,
-      form: 'good' as any,
-    };
-
     it('should return a 400 when userId is missing', async () => {
       const data = { ...logData };
       data.userId = null;
@@ -76,6 +76,15 @@ describe('Log (e2e)', () => {
         .expect(400);
     });
 
+    it('should return a 400 when reps is missing', async () => {
+      const data = { ...logData };
+      data.reps = null;
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
     it('should return a 400 when reps is not a number', async () => {
       const data = { ...logData };
       data.reps = 'invalidString';
@@ -94,6 +103,15 @@ describe('Log (e2e)', () => {
         .expect(400);
     });
 
+    it('should return a 400 when weightImperial is missing', async () => {
+      const data = { ...logData };
+      data.weightImperial = null;
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
     it('should return a 400 when weightImperial is not a number', async () => {
       const data = { ...logData };
       data.weightImperial = 'invalidString';
@@ -106,6 +124,15 @@ describe('Log (e2e)', () => {
     it('should return a 400 when weightImperial is less than 0', async () => {
       const data = { ...logData };
       data.weightImperial = -1;
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when weightMetric is missing', async () => {
+      const data = { ...logData };
+      data.weightMetric = null;
       return await request(app.getHttpServer())
         .post('/exercise')
         .send(data)
@@ -148,7 +175,6 @@ describe('Log (e2e)', () => {
 
   describe('GET /log/:id', () => {
     it('should return a 400 when id is invalid', async () => {
-      const invalidId = '1234';
       return await request(app.getHttpServer())
         .get('/log/' + invalidId)
         .send()
@@ -158,7 +184,6 @@ describe('Log (e2e)', () => {
 
   describe('PATCH /log/:id', () => {
     it('should return a 400 when id is invalid', async () => {
-      const invalidId = '1234';
       return await request(app.getHttpServer())
         .patch('/log/' + invalidId)
         .send()
@@ -168,7 +193,6 @@ describe('Log (e2e)', () => {
 
   describe('DELETE /log/:id', () => {
     it('should return a 400 when id is invalid', async () => {
-      const invalidId = '1234';
       return await request(app.getHttpServer())
         .delete('/log/' + invalidId)
         .send()
