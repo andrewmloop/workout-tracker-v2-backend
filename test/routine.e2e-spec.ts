@@ -5,11 +5,16 @@ import { Test } from '@nestjs/testing';
 import { Connection } from 'mongoose';
 import { AppModule } from '../src/app.module';
 import { AuthGuard } from '../src/auth/auth.guard';
-import { CreateRoutineDto } from '../src/routine/dto/create-routine.dto';
 
 describe('Routine (e2e)', () => {
   let app: INestApplication;
   let connection: Connection;
+
+  const invalidId = '1234';
+  const routineData = {
+    name: 'Test' as any,
+    description: 'A test routine' as any,
+  };
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -31,15 +36,36 @@ describe('Routine (e2e)', () => {
   }, 10_000);
 
   describe('POST /routine', () => {
-    const routineData: CreateRoutineDto = {
-      name: 'Test',
-      description: 'A test routine',
-      exercises: [],
-    };
-
     it('should return a 400 when name is missing', async () => {
       const data = { ...routineData };
+      data.name = null;
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when name is not a string', async () => {
+      const data = { ...routineData };
+      data.name = 123;
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when name has a length less than 1', async () => {
+      const data = { ...routineData };
       data.name = '';
+      return await request(app.getHttpServer())
+        .post('/exercise')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when description is not a string', async () => {
+      const data = { ...routineData };
+      data.description = 123;
       return await request(app.getHttpServer())
         .post('/exercise')
         .send(data)
@@ -58,7 +84,6 @@ describe('Routine (e2e)', () => {
 
   describe('GET /routine/:id', () => {
     it('should return a 400 when id is invalid', async () => {
-      const invalidId = '1234';
       return await request(app.getHttpServer())
         .get('/routine/' + invalidId)
         .send()
@@ -68,7 +93,6 @@ describe('Routine (e2e)', () => {
 
   describe('PATCH /routine/:id', () => {
     it('should return a 400 when id is invalid', async () => {
-      const invalidId = '1234';
       return await request(app.getHttpServer())
         .patch('/routine/' + invalidId)
         .send()
@@ -78,7 +102,6 @@ describe('Routine (e2e)', () => {
 
   describe('DELETE /routine/:id', () => {
     it('should return a 400 when id is invalid', async () => {
-      const invalidId = '1234';
       return await request(app.getHttpServer())
         .delete('/routine/' + invalidId)
         .send()

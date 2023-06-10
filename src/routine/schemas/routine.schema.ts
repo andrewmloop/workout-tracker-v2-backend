@@ -10,10 +10,14 @@ export type RoutineDocument = HydratedDocument<Routine>;
 export class Routine {
   @Prop({
     required: true,
+    type: String,
+    minlength: 1,
   })
   name: string;
 
-  @Prop()
+  @Prop({
+    type: String,
+  })
   description: string;
 
   @Prop({
@@ -36,6 +40,7 @@ export class Routine {
         },
       },
     ],
+    default: [],
   })
   exercises: { exerciseId: Types.ObjectId; sets: number; reps: number }[];
 }

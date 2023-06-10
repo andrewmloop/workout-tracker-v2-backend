@@ -1,13 +1,10 @@
-import { IsNotEmpty } from 'class-validator';
-import { Types } from 'mongoose';
+import { IsString, MinLength } from 'class-validator';
 
 export class CreateRoutineDto {
-  @IsNotEmpty({
-    message: 'A routine name is needed',
-  })
+  @IsString()
+  @MinLength(1)
   name: string;
 
+  @IsString()
   description: string;
-
-  exercises: { exercise: Types.ObjectId; sets: number; reps: number }[];
 }
