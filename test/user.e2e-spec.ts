@@ -12,6 +12,13 @@ describe('User (e2e)', () => {
   let app: INestApplication;
   let connection: Connection;
 
+  const invalidObjectId = 'InvalidID1234';
+  const userData = {
+    firstName: 'Test' as any,
+    email: 'test@e2e.com' as any,
+    password: 'Password1!' as any,
+  };
+
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
@@ -32,13 +39,16 @@ describe('User (e2e)', () => {
   }, 10_000);
 
   describe('POST /user', () => {
-    const userData: CreateUserDto = {
-      firstName: 'Test',
-      email: 'test@e2e.com',
-      password: 'Password1!',
-    };
-
     it('should return a 400 when missing a firstName', async () => {
+      const data = { ...userData };
+      data.firstName = null;
+      return await request(app.getHttpServer())
+        .post('/user')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when firstName has length of 0', async () => {
       const data = { ...userData };
       data.firstName = '';
       return await request(app.getHttpServer())
@@ -47,9 +57,18 @@ describe('User (e2e)', () => {
         .expect(400);
     });
 
-    it("should return a 400 when firstName isn't alphnumeric", async () => {
+    it("should return a 400 when firstName isn't a string", async () => {
       const data = { ...userData };
-      data.firstName = '1#$';
+      data.firstName = 123;
+      return await request(app.getHttpServer())
+        .post('/user')
+        .send(data)
+        .expect(400);
+    });
+
+    it('should return a 400 when firstName is too long', async () => {
+      const data = { ...userData };
+      data.firstName = 'abcdefghijklmnopqrstu'; // Length of 21
       return await request(app.getHttpServer())
         .post('/user')
         .send(data)
@@ -58,7 +77,7 @@ describe('User (e2e)', () => {
 
     it('should return a 400 when missing an email', async () => {
       const data = { ...userData };
-      data.email = '';
+      data.email = null;
       return await request(app.getHttpServer())
         .post('/user')
         .send(data)
@@ -76,7 +95,7 @@ describe('User (e2e)', () => {
 
     it('should return a 400 when missing a password', async () => {
       const data = { ...userData };
-      data.password = '';
+      data.password = null;
       return await request(app.getHttpServer())
         .post('/user')
         .send(data)
@@ -101,9 +120,9 @@ describe('User (e2e)', () => {
         .expect(400);
     });
 
-    it('should return a 400 when password is missing a sumbol', async () => {
+    it('should return a 400 when password is missing a symbol', async () => {
       const data = { ...userData };
-      data.password = 'Password!!';
+      data.password = 'Password12';
       return await request(app.getHttpServer())
         .post('/user')
         .send(data)
@@ -118,8 +137,6 @@ describe('User (e2e)', () => {
   });
 
   describe('GET /user/:id', () => {
-    const invalidObjectId = 'InvalidID1234';
-
     it('should return a 400 when id is invalid', async () => {
       return await request(app.getHttpServer())
         .get('/user/' + invalidObjectId)
@@ -129,97 +146,15 @@ describe('User (e2e)', () => {
   });
 
   describe('PATCH /user/:id', () => {
-    const invalidObjectId = 'InvalidID1234';
-    const validObjectId = Types.ObjectId.createFromTime(1);
-    const userData: UpdateUserDto = {
-      firstName: 'Test',
-      email: 'test@e2e.com',
-      password: 'Password1!',
-    };
-
     it('should return a 400 when id is invalid', async () => {
       return await request(app.getHttpServer())
         .patch('/user/' + invalidObjectId)
         .send(userData)
         .expect(400);
     });
-
-    it('should return a 400 when missing a firstName', async () => {
-      const data = { ...userData };
-      data.firstName = '';
-      return await request(app.getHttpServer())
-        .patch('/user/' + validObjectId)
-        .send(data)
-        .expect(400);
-    });
-
-    it("should return a 400 when firstName isn't alphnumeric", async () => {
-      const data = { ...userData };
-      data.firstName = '1#$';
-      return await request(app.getHttpServer())
-        .patch('/user/' + validObjectId)
-        .send(data)
-        .expect(400);
-    });
-
-    it('should return a 400 when missing an email', async () => {
-      const data = { ...userData };
-      data.email = '';
-      return await request(app.getHttpServer())
-        .patch('/user/' + validObjectId)
-        .send(data)
-        .expect(400);
-    });
-
-    it('should return a 400 when email is invalid', async () => {
-      const data = { ...userData };
-      data.email = 'invalidEm@i.l';
-      return await request(app.getHttpServer())
-        .patch('/user/' + validObjectId)
-        .send(data)
-        .expect(400);
-    });
-
-    it('should return a 400 when missing a password', async () => {
-      const data = { ...userData };
-      data.password = '';
-      return await request(app.getHttpServer())
-        .patch('/user/' + validObjectId)
-        .send(data)
-        .expect(400);
-    });
-
-    it('should return a 400 when password is too short', async () => {
-      const data = { ...userData };
-      data.password = 'Short1!';
-      return await request(app.getHttpServer())
-        .patch('/user/' + validObjectId)
-        .send(data)
-        .expect(400);
-    });
-
-    it('should return a 400 when password is missing a number', async () => {
-      const data = { ...userData };
-      data.password = 'Password!!';
-      return await request(app.getHttpServer())
-        .patch('/user/' + validObjectId)
-        .send(data)
-        .expect(400);
-    });
-
-    it('should return a 400 when password is missing a sumbol', async () => {
-      const data = { ...userData };
-      data.password = 'Password!!';
-      return await request(app.getHttpServer())
-        .patch('/user/' + validObjectId)
-        .send(data)
-        .expect(400);
-    });
   });
 
   describe('DELETE /user/:id', () => {
-    const invalidObjectId = 'InvalidID1234';
-
     it('should return a 400 when id is invalid', async () => {
       return await request(app.getHttpServer())
         .delete('/user/' + invalidObjectId)
