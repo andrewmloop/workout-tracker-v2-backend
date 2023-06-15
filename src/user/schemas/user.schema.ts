@@ -5,6 +5,12 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({
   timestamps: true,
+  toObject: {
+    transform(doc, ret) {
+      delete ret.password;
+      return ret;
+    },
+  },
 })
 export class User {
   @Prop({

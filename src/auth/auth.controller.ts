@@ -23,12 +23,10 @@ export class AuthController {
     const user = (await this.authService.signIn(signinDTO)) as UserDocument;
     const token = await this.authService.generateToken(user);
 
-    // Remove password before sending back
-    delete user.password;
-
     response.cookie('jwt', token, { httpOnly: true });
     response.send({
-      user: user,
+      // Call User's toObject to remove user's password before sending
+      user: user.toObject(),
     });
   }
 }
