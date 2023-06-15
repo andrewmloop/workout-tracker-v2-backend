@@ -12,7 +12,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(signinDTO: SigninDTO): Promise<any> {
+  async signIn(signinDTO: SigninDTO): Promise<UserDocument | Error> {
     const user = (await this.userService.findOneByEmail(
       signinDTO.email,
     )) as UserDocument;
@@ -27,10 +27,12 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
+    return user;
+  }
+
+  async generateToken(user: UserDocument) {
     const payload = { email: user.email, sub: user._id };
 
-    return {
-      accessToken: await this.jwtService.signAsync(payload),
-    };
+    return await this.jwtService.signAsync(payload);
   }
 }

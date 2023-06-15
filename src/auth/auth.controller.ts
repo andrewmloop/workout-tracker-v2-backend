@@ -1,7 +1,16 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SigninDTO } from './dto/signin.dto';
 import { Public } from '../utils/decorators/public.decorator';
+import { Response } from 'express';
+import { UserDocument } from '../user/schemas/user.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -10,7 +19,16 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('signin')
-  async signIn(@Body() signinDTO: SigninDTO) {
-    return await this.authService.signIn(signinDTO);
+  async signIn(@Body() signinDTO: SigninDTO, @Res() response: Response) {
+    const user = (await this.authService.signIn(signinDTO)) as UserDocument;
+    const token = await this.authService.generateToken(user);
+
+    // Remove password before sending back
+    delete user.password;
+
+    response.cookie('jwt', token, { httpOnly: true });
+    response.send({
+      user: user,
+    });
   }
 }

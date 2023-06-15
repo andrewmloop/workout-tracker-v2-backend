@@ -14,11 +14,13 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Types } from 'mongoose';
 import { MongoServerErrorFilter } from '../utils/filters/mongo-server-error.filter';
 import { ParseObjectIdPipe } from '../utils/pipes/parse-objectid.pipe';
+import { Public } from '../utils/decorators/public.decorator';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Public()
   @Post()
   @UseFilters(MongoServerErrorFilter)
   async create(@Body() createUserDto: CreateUserDto) {

@@ -1,13 +1,9 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export class SigninDTO {
-  @IsNotEmpty({
-    message: 'An email is required',
-  })
+  @IsEmail()
   email: string;
 
-  @IsNotEmpty({
-    message: 'A password is required',
-  })
+  @IsString()
   password: string;
 }
