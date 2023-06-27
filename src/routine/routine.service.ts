@@ -11,8 +11,12 @@ export class RoutineService {
     @InjectModel(Routine.name) private routineModel: Model<Routine>,
   ) {}
 
-  async create(createRoutineDto: CreateRoutineDto): Promise<Routine> {
-    return await this.routineModel.create(createRoutineDto);
+  async create(user, createRoutineDto: CreateRoutineDto): Promise<Routine> {
+    const newRoutine = {
+      userId: user['sub'],
+      ...createRoutineDto,
+    };
+    return await this.routineModel.create(newRoutine);
   }
 
   async findAll(): Promise<Routine[]> {

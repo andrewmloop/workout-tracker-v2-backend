@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { Exercise } from '../../exercise/schemas/exercise.schema';
+import { User } from '../../user/schemas/user.schema';
 
 export type RoutineDocument = HydratedDocument<Routine>;
 
@@ -8,6 +9,13 @@ export type RoutineDocument = HydratedDocument<Routine>;
   timestamps: true,
 })
 export class Routine {
+  @Prop({
+    required: true,
+    type: Types.ObjectId,
+    ref: User.name,
+  })
+  userId: Types.ObjectId;
+
   @Prop({
     required: true,
     type: String,

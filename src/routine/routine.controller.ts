@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  Logger,
 } from '@nestjs/common';
 import { RoutineService } from './routine.service';
 import { CreateRoutineDto } from './dto/create-routine.dto';
@@ -18,8 +20,12 @@ export class RoutineController {
   constructor(private readonly routineService: RoutineService) {}
 
   @Post()
-  async create(@Body() createRoutineDto: CreateRoutineDto) {
-    return this.routineService.create(createRoutineDto);
+  async create(
+    @Req() req: Request,
+    @Body() createRoutineDto: CreateRoutineDto,
+  ) {
+    const user = req['user'];
+    return this.routineService.create(user, createRoutineDto);
   }
 
   @Get()
