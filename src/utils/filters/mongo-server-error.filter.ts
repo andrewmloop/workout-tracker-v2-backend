@@ -11,7 +11,7 @@ export class MongoServerErrorFilter implements ExceptionFilter {
 
     response.status(400).json({
       statusCode: 400,
-      message: 'That email is taken',
+      message: 'That email is unavailable',
       path: request.url,
     });
   }
