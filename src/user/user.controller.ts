@@ -15,6 +15,7 @@ import { Types } from 'mongoose';
 import { MongoServerErrorFilter } from '../utils/filters/mongo-server-error.filter';
 import { ParseObjectIdPipe } from '../utils/pipes/parse-objectid.pipe';
 import { Public } from '../utils/decorators/public.decorator';
+import { UserDocument } from './schemas/user.schema';
 
 @Controller('user')
 export class UserController {
@@ -24,7 +25,11 @@ export class UserController {
   @Post()
   @UseFilters(MongoServerErrorFilter)
   async create(@Body() createUserDto: CreateUserDto) {
-    return await this.userService.create(createUserDto);
+    const newUser = (await this.userService.create(
+      createUserDto,
+    )) as UserDocument;
+    // Call user's toObject to remove password field before sending back
+    return newUser.toObject();
   }
 
   @Get()
@@ -34,7 +39,9 @@ export class UserController {
 
   @Get(':id')
   async findOne(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
-    return await this.userService.findOneById(id);
+    const foundUser = (await this.userService.findOneById(id)) as UserDocument;
+    // Call user's toObject to remove password field before sending back
+    return foundUser.toObject();
   }
 
   @Patch(':id')
@@ -42,7 +49,12 @@ export class UserController {
     @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return await this.userService.update(id, updateUserDto);
+    const updatedUser = (await this.userService.update(
+      id,
+      updateUserDto,
+    )) as UserDocument;
+    // Call user's toObject to remove password field before sending back
+    return updatedUser.toObject();
   }
 
   @Delete(':id')
