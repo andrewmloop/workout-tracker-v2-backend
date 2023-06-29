@@ -12,7 +12,9 @@ import { CreateExerciseDto } from './dto/create-exercise.dto';
 import { Types } from 'mongoose';
 import { ParseObjectIdPipe } from '../utils/pipes/parse-objectid.pipe';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { Public } from '../utils/decorators/public.decorator';
 
+@Public()
 @Controller('exercise')
 export class ExerciseController {
   constructor(private readonly exerciseService: ExerciseService) {}
