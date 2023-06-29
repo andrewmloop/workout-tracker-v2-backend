@@ -19,8 +19,8 @@ export class RoutineService {
     return await this.routineModel.create(newRoutine);
   }
 
-  async findAll(): Promise<Routine[]> {
-    return await this.routineModel.find();
+  async findAll(userId: Types.ObjectId): Promise<Routine[]> {
+    return await this.routineModel.find({ userId: userId });
   }
 
   async findOne(id: Types.ObjectId): Promise<Routine> {

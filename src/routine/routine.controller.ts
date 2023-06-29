@@ -29,8 +29,9 @@ export class RoutineController {
   }
 
   @Get()
-  async findAll() {
-    return this.routineService.findAll();
+  async findAll(@Req() req: Request) {
+    const userId = req['user']['sub'];
+    return this.routineService.findAll(userId);
   }
 
   @Get(':id')
