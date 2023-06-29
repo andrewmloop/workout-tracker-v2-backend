@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -28,5 +29,15 @@ export class AuthController {
       // Call User's toObject to remove user's password before sending
       user: user.toObject(),
     });
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('signout')
+  async signOut(@Res() response: Response) {
+    response.cookie('jwt', 'none', {
+      httpOnly: true,
+      expires: new Date(Date.now() + 5_000),
+    });
+    response.send({ success: true, message: 'User signed out successfully' });
   }
 }
