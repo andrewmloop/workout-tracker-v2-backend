@@ -4,6 +4,7 @@ import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Routine } from './schemas/routine.schema';
 import { Model, Types } from 'mongoose';
+import { AddExerciseDto } from './dto/add-exercise.dto';
 
 @Injectable()
 export class RoutineService {
@@ -36,7 +37,24 @@ export class RoutineService {
     });
   }
 
-  // TODO: Add functions to add/remove exercises from routine
+  async addExercise(id: Types.ObjectId, addExerciseDto: AddExerciseDto) {
+    const newExerciseIdList = addExerciseDto.exerciseIds.map((id) => {
+      return { exerciseId: id };
+    });
+    return await this.routineModel.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          exercises: {
+            $each: newExerciseIdList,
+          },
+        },
+      },
+      { new: true },
+    );
+  }
+
+  // TODO: remove exercises from routine
 
   // TODO: Add functions to set target sets on reps on exercise in routine
 

@@ -7,13 +7,13 @@ import {
   Param,
   Delete,
   Req,
-  Logger,
 } from '@nestjs/common';
 import { RoutineService } from './routine.service';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { Types } from 'mongoose';
 import { ParseObjectIdPipe } from '../utils/pipes/parse-objectid.pipe';
+import { AddExerciseDto } from './dto/add-exercise.dto';
 
 @Controller('routine')
 export class RoutineController {
@@ -50,5 +50,13 @@ export class RoutineController {
   @Delete(':id')
   async remove(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
     return this.routineService.remove(id);
+  }
+
+  @Post(':id/add')
+  async addExercise(
+    @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
+    @Body() addExerciseDto: AddExerciseDto,
+  ) {
+    return this.routineService.addExercise(id, addExerciseDto);
   }
 }
