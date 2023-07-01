@@ -12,9 +12,12 @@ export class RoutineService {
     @InjectModel(Routine.name) private routineModel: Model<Routine>,
   ) {}
 
-  async create(user, createRoutineDto: CreateRoutineDto): Promise<Routine> {
+  async create(
+    userId: Types.ObjectId,
+    createRoutineDto: CreateRoutineDto,
+  ): Promise<Routine> {
     const newRoutine = {
-      userId: user['sub'],
+      userId: userId,
       ...createRoutineDto,
     };
     return await this.routineModel.create(newRoutine);

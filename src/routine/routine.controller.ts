@@ -24,13 +24,13 @@ export class RoutineController {
     @Req() req: Request,
     @Body() createRoutineDto: CreateRoutineDto,
   ) {
-    const user = req['user'];
-    return this.routineService.create(user, createRoutineDto);
+    const userId = req['user']['id'];
+    return this.routineService.create(userId, createRoutineDto);
   }
 
   @Get()
   async findAll(@Req() req: Request) {
-    const userId = req['user']['sub'];
+    const userId = req['user']['id'];
     return this.routineService.findAll(userId);
   }
 
