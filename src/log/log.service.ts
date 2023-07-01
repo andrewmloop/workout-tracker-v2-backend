@@ -9,8 +9,15 @@ import { Model, Types } from 'mongoose';
 export class LogService {
   constructor(@InjectModel(Log.name) private logModel: Model<Log>) {}
 
-  async create(createLogDto: CreateLogDto): Promise<Log> {
-    return await this.logModel.create(createLogDto);
+  async create(
+    userId: Types.ObjectId,
+    createLogDto: CreateLogDto,
+  ): Promise<Log> {
+    const newLog: Log = {
+      userId: userId,
+      ...createLogDto,
+    };
+    return await this.logModel.create(newLog);
   }
 
   async findAll(): Promise<Log[]> {

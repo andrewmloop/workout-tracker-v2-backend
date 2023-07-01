@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  Logger,
 } from '@nestjs/common';
 import { LogService } from './log.service';
 import { CreateLogDto } from './dto/create-log.dto';
@@ -18,8 +20,10 @@ export class LogController {
   constructor(private readonly logService: LogService) {}
 
   @Post()
-  async create(@Body() createLogDto: CreateLogDto) {
-    return await this.logService.create(createLogDto);
+  async create(@Req() req: Request, @Body() createLogDto: CreateLogDto) {
+    const userId = req['user']['id'];
+    Logger.log(userId);
+    return await this.logService.create(userId, createLogDto);
   }
 
   @Get()

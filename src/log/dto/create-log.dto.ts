@@ -4,9 +4,6 @@ import { FORM_ENUM } from '../../utils/enums/log.enum';
 
 export class CreateLogDto {
   @IsMongoId()
-  userId: Types.ObjectId;
-
-  @IsMongoId()
   exerciseId: Types.ObjectId;
 
   @IsNumber()
