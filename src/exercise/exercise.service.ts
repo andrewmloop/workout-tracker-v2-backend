@@ -17,17 +17,21 @@ export class ExerciseService {
   }
 
   async findAll(): Promise<Exercise[]> {
-    return await this.exerciseModel.find();
+    return await this.exerciseModel.find().sort({ name: 'ascending' });
   }
 
   async findAllByName(name: string): Promise<Exercise[]> {
-    return await this.exerciseModel.find({ name: name });
+    return await this.exerciseModel
+      .find({ name: name })
+      .sort({ name: 'ascending' });
   }
 
   async findAllByMuscle(muscle: string): Promise<Exercise[]> {
-    return await this.exerciseModel.find({
-      $or: [{ primaryMuscles: muscle }, { secondaryMuscles: muscle }],
-    });
+    return await this.exerciseModel
+      .find({
+        $or: [{ primaryMuscles: muscle }, { secondaryMuscles: muscle }],
+      })
+      .sort({ name: 'ascending' });
   }
 
   async findOneById(id: Types.ObjectId): Promise<Exercise> {
