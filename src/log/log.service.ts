@@ -20,8 +20,18 @@ export class LogService {
     return await this.logModel.create(newLog);
   }
 
-  async findAll(): Promise<Log[]> {
-    return await this.logModel.find();
+  async findAll(userId: Types.ObjectId): Promise<Log[]> {
+    return await this.logModel.find({ userId: userId });
+  }
+
+  async findAllForExercise(
+    userId: Types.ObjectId,
+    exerciseId: Types.ObjectId,
+  ): Promise<Log[]> {
+    return await this.logModel
+      .find({ userId: userId, exerciseId: exerciseId })
+      .sort({ createdAt: 'descending' })
+      .exec();
   }
 
   async findOne(id: Types.ObjectId): Promise<Log> {

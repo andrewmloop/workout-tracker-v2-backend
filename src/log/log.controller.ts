@@ -27,8 +27,18 @@ export class LogController {
   }
 
   @Get()
-  async findAll() {
-    return await this.logService.findAll();
+  async findAll(@Req() req: Request) {
+    const userId = req['user']['id'];
+    return await this.logService.findAll(userId);
+  }
+
+  @Get('/exercise/:id')
+  async findAllForExercise(
+    @Req() req: Request,
+    @Param('id', ParseObjectIdPipe) exerciseId: Types.ObjectId,
+  ) {
+    const userId = req['user']['id'];
+    return await this.logService.findAllForExercise(userId, exerciseId);
   }
 
   @Get(':id')
