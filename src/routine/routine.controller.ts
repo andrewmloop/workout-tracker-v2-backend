@@ -59,4 +59,12 @@ export class RoutineController {
   ) {
     return this.routineService.addExercise(id, addExerciseDto);
   }
+
+  @Delete(':id/remove/:exerciseId')
+  async deleteExercise(
+    @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
+    @Param('exerciseId', ParseObjectIdPipe) exerciseId: Types.ObjectId,
+  ) {
+    return this.routineService.removeExercise(id, exerciseId);
+  }
 }

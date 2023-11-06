@@ -57,7 +57,19 @@ export class RoutineService {
     );
   }
 
-  // TODO: remove exercises from routine
+  async removeExercise(id: Types.ObjectId, exerciseId: Types.ObjectId) {
+    return await this.routineModel.findByIdAndUpdate(
+      id,
+      {
+        $pull: {
+          exercises: {
+            exerciseId: exerciseId,
+          },
+        },
+      },
+      { new: true },
+    );
+  }
 
   // TODO: Add functions to set target sets on reps on exercise in routine
 
